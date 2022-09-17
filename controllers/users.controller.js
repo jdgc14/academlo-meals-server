@@ -4,6 +4,9 @@ const dotenv = require('dotenv')
 
 // Models
 const { User } = require('../models/user.model')
+const { Order } = require('../models/order.model')
+const { Meal } = require('../models/meal.model')
+const { Restaurant } = require('../models/restaurant.model')
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util')
@@ -48,6 +51,7 @@ const readActiveUsers = catchAsync(async (req, res, next) => {
     const users = await User.findAll({
         attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         where: { status: 'active' },
+        include: [{ model: Order }],
         // include: [
         //     {
         //         model: Post,
@@ -73,23 +77,23 @@ const readActiveUsers = catchAsync(async (req, res, next) => {
 // C R >U< D
 const updateUserById = catchAsync(async (req, res, next) => {
     const { name, email } = req.body
-    const { user } = req
+    const { sessionUser } = req
 
     // Update using a model's instance
-    await user.update({ name, email })
+    await sessionUser.update({ name, email })
 
     res.status(200).json({
         status: 'success',
-        user,
+        sessionUser,
     })
 })
 
 // C R U >D<
 const deleteUserById = catchAsync(async (req, res, next) => {
-    const { user } = req
+    const { sessionUser } = req
 
     // Soft delete
-    await user.update({ status: 'deleted' })
+    await sessionUser.update({ status: 'deleted' })
 
     res.status(204).json({ status: 'success' })
 })
@@ -123,10 +127,66 @@ const login = catchAsync(async (req, res, next) => {
     })
 })
 
+const readOrders = catchAsync(async (req, res, next) => {
+    const { id } = req.sessionUser
+
+    const user = await User.findOne({
+        where: { id },
+        attributes: ['id', 'name', 'email'],
+        include: {
+            model: Order,
+            attributes: ['id', 'totalPrice', 'quantity', 'status'],
+            include: {
+                model: Meal,
+                attributes: ['id', 'name', 'price', 'status'],
+                include: {
+                    model: Restaurant,
+                    attributes: { exclude: ['createdAt', 'updatedAt'] },
+                },
+            },
+        },
+    })
+
+    res.status(200).json({
+        status: 'success',
+        user,
+    })
+})
+
+const readOrderById = catchAsync(async (req, res, next) => {
+    const orderId = req.params.id
+    const { id } = req.sessionUser
+
+    const user = await User.findOne({
+        where: { id },
+        attributes: ['id', 'name', 'email'],
+        include: {
+            model: Order,
+            where: { id: orderId },
+            attributes: ['id', 'totalPrice', 'quantity', 'status'],
+            include: {
+                model: Meal,
+                attributes: ['id', 'name', 'price', 'status'],
+                include: {
+                    model: Restaurant,
+                    attributes: { exclude: ['createdAt', 'updatedAt'] },
+                },
+            },
+        },
+    })
+
+    res.status(200).json({
+        status: 'success',
+        user,
+    })
+})
+
 module.exports = {
     readActiveUsers,
     createUser,
     updateUserById,
     deleteUserById,
     login,
+    readOrders,
+    readOrderById,
 }
