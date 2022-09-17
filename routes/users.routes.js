@@ -12,6 +12,7 @@ const {
 } = require('../controllers/users.controller')
 
 // Middlewares
+const { userExists } = require('../middlewares/users.middlewares')
 const { orderExists } = require('../middlewares/orders.middlewares')
 
 // Auth middlewares
@@ -45,12 +46,13 @@ usersRouter.get('/', protectAdmin, readActiveUsers)
 // Account owner access
 usersRouter.patch(
     '/:id',
+    userExists,
     protectUsersAccount,
     updateUserValidators,
     updateUserById
 )
 
-usersRouter.delete('/:id', protectUsersAccount, deleteUserById)
+usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUserById)
 
 usersRouter.get('/orders', readOrders)
 

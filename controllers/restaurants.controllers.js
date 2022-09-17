@@ -3,6 +3,7 @@ const dotenv = require('dotenv')
 
 // Models
 const { Restaurant } = require('../models/restaurant.model')
+const { Review } = require('../models/review.model')
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util')
