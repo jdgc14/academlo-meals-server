@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 // Models
 const { Order } = require('../models/order.model')
 const { Meal } = require('../models/meal.model')
+const { Restaurant } = require('../models/restaurant.model')
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util')
@@ -19,7 +20,6 @@ const createOrder = catchAsync(async (req, res, next) => {
     const meal = await Meal.findOne({
         where: { id: mealId, status: 'active' },
     })
-    console.log(meal)
 
     if (!meal) {
         return next(new AppError('Meal not found', 404))
@@ -39,13 +39,25 @@ const createOrder = catchAsync(async (req, res, next) => {
 })
 
 // C >R< U D
-// dont ready
 const readOrdersByUser = catchAsync(async (req, res, next) => {
-    const { sessionUser } = req
+    const { id } = req.sessionUser
+
+    const order = await Order.findAll({
+        where: { userId: id },
+        attributes: { exclude: ['mealId', 'userId'] },
+        include: {
+            model: Meal,
+            attributes: ['id', 'name', 'price'],
+            include: {
+                model: Restaurant,
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+            },
+        },
+    })
 
     res.status(200).json({
-        status: 'hacer la logica',
-        sessionUser,
+        status: 'success',
+        order,
     })
 })
 

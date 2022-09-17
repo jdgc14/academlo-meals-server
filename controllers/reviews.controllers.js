@@ -15,15 +15,13 @@ const createRestaurantReview = catchAsync(async (req, res, next) => {
 
     const userId = req.sessionUser.id
 
-    const { restaurantId } = req.params
-
     const { comment, rating } = req.body
 
     const newReview = await Review.create({
         userId,
         comment,
         rating,
-        restaurantId,
+        restaurantId: restaurant.id,
     })
 
     res.status(201).json({
@@ -37,8 +35,15 @@ const createRestaurantReview = catchAsync(async (req, res, next) => {
 const updateReviewById = catchAsync(async (req, res, next) => {
     const { review } = req
 
+    const { comment, rating } = req.body
+
+    await review.update({
+        comment,
+        rating,
+    })
+
     res.status(200).json({
-        status: 'updating',
+        status: 'success',
         review,
     })
 })
@@ -47,9 +52,12 @@ const updateReviewById = catchAsync(async (req, res, next) => {
 const deleteReviewById = catchAsync(async (req, res, next) => {
     const { review } = req
 
-    res.status(200).json({
-        status: 'deleting',
-        review,
+    await review.update({
+        status: 'deleted,',
+    })
+
+    res.status(204).json({
+        status: 'success',
     })
 })
 
