@@ -28,7 +28,6 @@ const {
 const restaurantsRouter = express.Router()
 
 // Assigning end-points
-
 restaurantsRouter.get('/', readActiveRestaurants)
 restaurantsRouter.get('/:id', restaurantExists, readRestaurantById)
 

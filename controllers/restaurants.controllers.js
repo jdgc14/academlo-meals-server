@@ -53,8 +53,7 @@ const readRestaurantById = catchAsync(async (req, res, next) => {
 
 // C R >U< D
 const updateRestaurantById = catchAsync(async (req, res, next) => {
-    const { name } = req.body
-    const { address } = req.body
+    const { name, address } = req.body
     const { restaurant } = req
 
     await restaurant.update({ name, address })
