@@ -71,7 +71,7 @@ const readActiveUsers = catchAsync(async (req, res, next) => {
 })
 
 // C R >U< D
-const updateUser = catchAsync(async (req, res, next) => {
+const updateUserById = catchAsync(async (req, res, next) => {
     const { name } = req.body
     const { email } = req.body
     const { user } = req
@@ -86,7 +86,7 @@ const updateUser = catchAsync(async (req, res, next) => {
 })
 
 // C R U >D<
-const deleteUser = catchAsync(async (req, res, next) => {
+const deleteUserById = catchAsync(async (req, res, next) => {
     const { user } = req
 
     // Soft delete
@@ -127,7 +127,7 @@ const login = catchAsync(async (req, res, next) => {
 module.exports = {
     readActiveUsers,
     createUser,
-    updateUser,
-    deleteUser,
+    updateUserById,
+    deleteUserById,
     login,
 }

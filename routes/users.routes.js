@@ -4,8 +4,8 @@ const express = require('express')
 const {
     readActiveUsers,
     createUser,
-    updateUser,
-    deleteUser,
+    updateUserById,
+    deleteUserById,
     login,
 } = require('../controllers/users.controller')
 
@@ -24,7 +24,7 @@ const {
     createUserValidators,
     updateUserValidators,
     loginUserValidators,
-} = require('../middlewares/validators.middlewares')
+} = require('../middlewares/usersValidators.middlewares')
 
 // Creating router
 const usersRouter = express.Router()
@@ -34,7 +34,7 @@ usersRouter.post('/', createUserValidators, createUser)
 
 usersRouter.post('/login', loginUserValidators, login)
 
-// Protecting below endpoints
+// Protecting endpoints
 usersRouter.use(protectSession)
 
 // Access to admin users
@@ -46,9 +46,9 @@ usersRouter.patch(
     userExists,
     protectUsersAccount,
     updateUserValidators,
-    updateUser
+    updateUserById
 )
 
-usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUser)
+usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUserById)
 
 module.exports = { usersRouter }
