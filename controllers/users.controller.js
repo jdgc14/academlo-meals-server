@@ -154,30 +154,33 @@ const readOrders = catchAsync(async (req, res, next) => {
 })
 
 const readOrderById = catchAsync(async (req, res, next) => {
-    const orderId = req.params.id
-    const { id } = req.sessionUser
+    const { order } = req
+    const user = req.sessionUser
 
-    const user = await User.findOne({
-        where: { id },
-        attributes: ['id', 'name', 'email'],
-        include: {
-            model: Order,
-            where: { id: orderId },
-            attributes: ['id', 'totalPrice', 'quantity', 'status'],
-            include: {
-                model: Meal,
-                attributes: ['id', 'name', 'price', 'status'],
-                include: {
-                    model: Restaurant,
-                    attributes: { exclude: ['createdAt', 'updatedAt'] },
-                },
-            },
-        },
-    })
+    // const user = await User.findOne({
+    //     where: { id },
+    //     attributes: ['id', 'name', 'email'],
+    //     include: {
+    //         model: Order,
+    //         where: { id: orderId },
+    //         attributes: ['id', 'totalPrice', 'quantity', 'status'],
+    //         include: {
+    //             model: Meal,
+    //             attributes: ['id', 'name', 'price', 'status'],
+    //             include: {
+    //                 model: Restaurant,
+    //                 attributes: { exclude: ['createdAt', 'updatedAt'] },
+    //             },
+    //         },
+    //     },
+    // })
 
     res.status(200).json({
         status: 'success',
-        user,
+        data: {
+            user,
+            order,
+        },
     })
 })
 

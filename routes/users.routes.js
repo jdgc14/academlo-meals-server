@@ -12,6 +12,7 @@ const {
 } = require('../controllers/users.controller')
 
 // Middlewares
+const { orderExists } = require('../middlewares/orders.middlewares')
 
 // Auth middlewares
 const {
@@ -53,6 +54,6 @@ usersRouter.delete('/:id', protectUsersAccount, deleteUserById)
 
 usersRouter.get('/orders', readOrders)
 
-usersRouter.get('/orders/:id', readOrderById)
+usersRouter.get('/orders/:id', orderExists, readOrderById)
 
 module.exports = { usersRouter }
