@@ -72,8 +72,7 @@ const readActiveUsers = catchAsync(async (req, res, next) => {
 
 // C R >U< D
 const updateUserById = catchAsync(async (req, res, next) => {
-    const { name } = req.body
-    const { email } = req.body
+    const { name, email } = req.body
     const { user } = req
 
     // Update using a model's instance

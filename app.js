@@ -3,6 +3,7 @@ const express = require('express')
 // Import routers
 const { usersRouter } = require('./routes/users.routes')
 const { restaurantsRouter } = require('./routes/restaurants.routes')
+const { mealsRouter } = require('./routes/meals.routes')
 
 // Init our Express app
 const app = express()
@@ -13,6 +14,7 @@ app.use(express.json())
 // Defining end-points
 app.use('/api/v1/users', usersRouter)
 app.use('/api/v1/restaurants', restaurantsRouter)
+app.use('/api/v1/meals', mealsRouter)
 
 // Global error handler
 app.use((error, req, res, next) => {
