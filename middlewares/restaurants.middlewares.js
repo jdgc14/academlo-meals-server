@@ -6,7 +6,7 @@ const { catchAsync } = require('../utils/catchAsync.util')
 const { AppError } = require('../utils/appError.util')
 
 const restaurantExists = catchAsync(async (req, res, next) => {
-    const { id } = req.params
+    const id = req.params.id || req.params.restaurantId
 
     const restaurant = await Restaurant.findOne({
         where: { id },

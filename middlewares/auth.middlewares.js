@@ -46,28 +46,6 @@ const protectSession = catchAsync(async (req, res, next) => {
     next()
 })
 
-const protectUsersAccount = (req, res, next) => {
-    const { sessionUser, user } = req
-
-    // If the users (ids) don't match, send an error
-    if (sessionUser.id !== user.id) {
-        return next(new AppError('You are not the owner of this account.', 403))
-    }
-
-    // If the ids match, grant access
-    next()
-}
-
-const protectOrderOwners = (req, res, next) => {
-    const { sessionUser, order } = req
-
-    if (sessionUser.id !== order.userId) {
-        return next(new AppError('This order does not belong to you.', 403))
-    }
-
-    next()
-}
-
 const protectAdmin = (req, res, next) => {
     const { sessionUser } = req
 
@@ -80,9 +58,42 @@ const protectAdmin = (req, res, next) => {
     next()
 }
 
+const protectUsersAccount = (req, res, next) => {
+    const { sessionUser, user } = req
+
+    // If the users (ids) don't match, send an error
+    if (sessionUser.id !== user.id) {
+        return next(new AppError('You are not the owner of this account.', 403))
+    }
+
+    // If the ids match, grant access
+    next()
+}
+
+const protectOrderOwner = (req, res, next) => {
+    const { sessionUser, order } = req
+
+    if (sessionUser.id !== order.userId) {
+        return next(new AppError('This order does not belong to you.', 403))
+    }
+
+    next()
+}
+
+const protectReviewOwner = (req, res, next) => {
+    const { sessionUser, review } = req
+
+    if (sessionUser.id !== review.userId) {
+        return next(new AppError('This review does not belong to you.', 403))
+    }
+
+    next()
+}
+
 module.exports = {
     protectSession,
     protectUsersAccount,
-    protectOrderOwners,
+    protectOrderOwner,
     protectAdmin,
+    protectReviewOwner,
 }

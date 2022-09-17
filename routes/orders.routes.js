@@ -14,7 +14,7 @@ const { orderIsActive } = require('../middlewares/orders.middlewares')
 // Auth middlewares
 const {
     protectSession,
-    protectOrderOwners,
+    protectOrderOwner,
 } = require('../middlewares/auth.middlewares')
 
 // Validators middlewares
@@ -32,8 +32,8 @@ ordersRouter.post('/', createMealValidators, createOrder)
 
 ordersRouter.get('/me', readOrdersByUser)
 
-ordersRouter.patch('/:id', orderIsActive, protectOrderOwners, updateOrder)
+ordersRouter.patch('/:id', orderIsActive, protectOrderOwner, updateOrder)
 
-ordersRouter.delete('/:id', orderIsActive, protectOrderOwners, deletOrder)
+ordersRouter.delete('/:id', orderIsActive, protectOrderOwner, deletOrder)
 
 module.exports = { ordersRouter }
