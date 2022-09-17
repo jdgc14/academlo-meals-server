@@ -9,14 +9,14 @@ const {
 
 // Middlewares
 const { restaurantExists } = require('../middlewares/restaurants.middlewares')
-const { reviewExists } = require('../middlewares/reviews.middlewares')
+const { reviewIsActive } = require('../middlewares/reviews.middlewares')
 
 // Auth middlewares
 const { protectReviewOwner } = require('../middlewares/auth.middlewares')
 
 // Validators middlewares
 const {
-    createReviewValidators,
+    reviewValidators,
 } = require('../middlewares/reviewsValidators.middlewares')
 
 // Creating router
@@ -25,12 +25,23 @@ const reviewsRouter = express.Router()
 reviewsRouter.post(
     '/:restaurantId',
     restaurantExists,
-    createReviewValidators,
+    reviewValidators,
     createRestaurantReview
 )
 
-reviewsRouter.patch('/:id', reviewExists, protectReviewOwner, updateReviewById)
+reviewsRouter.patch(
+    '/:id',
+    reviewIsActive,
+    reviewValidators,
+    protectReviewOwner,
+    updateReviewById
+)
 
-reviewsRouter.delete('/:id', reviewExists, protectReviewOwner, deleteReviewById)
+reviewsRouter.delete(
+    '/:id',
+    reviewIsActive,
+    protectReviewOwner,
+    deleteReviewById
+)
 
 module.exports = { reviewsRouter }

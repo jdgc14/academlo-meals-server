@@ -1,6 +1,6 @@
 const { checkValidations, body } = require('../utils/expressValidator.util')
 
-const createReviewValidators = [
+const reviewValidators = [
     body('comment')
         .isString()
         .withMessage('Comment must be a string')
@@ -12,4 +12,4 @@ const createReviewValidators = [
     checkValidations,
 ]
 
-module.exports = { createReviewValidators }
+module.exports = { reviewValidators }

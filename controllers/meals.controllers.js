@@ -3,6 +3,9 @@ const dotenv = require('dotenv')
 
 // Models
 const { Meal } = require('../models/meal.model')
+const { Restaurant } = require('../models/restaurant.model')
+const { Review } = require('../models/review.model')
+const { User } = require('../models/user.model')
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync.util')
@@ -31,8 +34,21 @@ const createMeal = catchAsync(async (req, res, next) => {
 // C >R< U D
 const readActiveMeals = catchAsync(async (req, res, next) => {
     const meals = await Meal.findAll({
-        // attributes: { exclude: ['id', 'status',] },
+        attributes: ['id', 'name', 'price'],
         where: { status: 'active' },
+        include: {
+            model: Restaurant,
+            where: { status: 'active' },
+            attributes: { exclude: ['status', 'createdAt', 'updatedAt'] },
+            // include: {
+            //     model: Review,
+            //     attributes: ['id', 'comment', 'rating'],
+            //     include: {
+            //         model: User,
+            //         attributes: ['id', 'name', 'email'],
+            //     },
+            // },
+        },
     })
 
     res.status(200).json({
@@ -43,6 +59,7 @@ const readActiveMeals = catchAsync(async (req, res, next) => {
     })
 })
 
+// C >R< U D
 const readActiveMealById = catchAsync(async (req, res, next) => {
     const { meal } = req
 

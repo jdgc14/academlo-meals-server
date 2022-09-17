@@ -5,11 +5,11 @@ const { Review } = require('../models/review.model')
 const { catchAsync } = require('../utils/catchAsync.util')
 const { AppError } = require('../utils/appError.util')
 
-const reviewExists = catchAsync(async (req, res, next) => {
+const reviewIsActive = catchAsync(async (req, res, next) => {
     const { id } = req.params
 
     const review = await Review.findOne({
-        where: { id },
+        where: { id, status: 'active' },
     })
 
     // If review doesn't exist, send error message
@@ -23,5 +23,5 @@ const reviewExists = catchAsync(async (req, res, next) => {
 })
 
 module.exports = {
-    reviewExists,
+    reviewIsActive,
 }
