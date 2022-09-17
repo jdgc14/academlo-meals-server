@@ -7,10 +7,12 @@ const {
     updateUserById,
     deleteUserById,
     login,
+    readOrders,
+    readOrderById,
 } = require('../controllers/users.controller')
 
 // Middlewares
-const { userExists } = require('../middlewares/users.middlewares')
+const { orderExists } = require('../middlewares/orders.middlewares')
 
 // Auth middlewares
 const {
@@ -30,7 +32,7 @@ const {
 const usersRouter = express.Router()
 
 // Assigning end-points
-usersRouter.post('/', createUserValidators, createUser)
+usersRouter.post('/signup', createUserValidators, createUser)
 
 usersRouter.post('/login', loginUserValidators, login)
 
@@ -43,12 +45,15 @@ usersRouter.get('/', protectAdmin, readActiveUsers)
 // Account owner access
 usersRouter.patch(
     '/:id',
-    userExists,
     protectUsersAccount,
     updateUserValidators,
     updateUserById
 )
 
-usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUserById)
+usersRouter.delete('/:id', protectUsersAccount, deleteUserById)
+
+usersRouter.get('/orders', readOrders)
+
+usersRouter.get('/orders/:id', orderExists, readOrderById)
 
 module.exports = { usersRouter }
