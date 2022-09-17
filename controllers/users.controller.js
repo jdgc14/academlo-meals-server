@@ -18,10 +18,6 @@ dotenv.config()
 const createUser = catchAsync(async (req, res, next) => {
     const { name, email, password, role } = req.body
 
-    if (role !== 'admin' && role !== 'normal') {
-        return next(new AppError('Invalid role', 400))
-    }
-
     // Encrypt the password
     const salt = await bcrypt.genSalt(12)
     const hashedPassword = await bcrypt.hash(password, salt)
@@ -39,7 +35,7 @@ const createUser = catchAsync(async (req, res, next) => {
     // newUser.createdAt = undefined
     // newUser.updatedAt = undefined
 
-    // 201 -> Success and a resource has been created
+    // User has been created
     res.status(201).json({
         status: 'success',
         newUser,
@@ -52,18 +48,6 @@ const readActiveUsers = catchAsync(async (req, res, next) => {
         attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         where: { status: 'active' },
         include: [{ model: Order }],
-        // include: [
-        //     {
-        //         model: Post,
-        //         include: {
-        //             model: Comment,
-        //             include: { model: User },
-        //         },
-        //     },
-        //     {
-        //         model: Comment,
-        //     },
-        // ],
     })
 
     res.status(200).json({

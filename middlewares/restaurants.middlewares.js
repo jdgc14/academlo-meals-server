@@ -5,12 +5,11 @@ const { Restaurant } = require('../models/restaurant.model')
 const { catchAsync } = require('../utils/catchAsync.util')
 const { AppError } = require('../utils/appError.util')
 
-const restaurantExists = catchAsync(async (req, res, next) => {
+const restaurantIsActive = catchAsync(async (req, res, next) => {
     const id = req.params.id || req.params.restaurantId
 
     const restaurant = await Restaurant.findOne({
-        where: { id },
-        // attributes: { exclude: [] },
+        where: { id, status: 'active' },
     })
 
     // If restaurant doesn't exist, send error message
@@ -23,4 +22,4 @@ const restaurantExists = catchAsync(async (req, res, next) => {
     next()
 })
 
-module.exports = { restaurantExists }
+module.exports = { restaurantIsActive }

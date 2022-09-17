@@ -10,7 +10,7 @@ const {
 } = require('../controllers/restaurants.controllers')
 
 // Middlewares
-const { restaurantExists } = require('../middlewares/restaurants.middlewares')
+const { restaurantIsActive } = require('../middlewares/restaurants.middlewares')
 
 // Auth middlewares
 const {
@@ -32,7 +32,7 @@ const { reviewsRouter } = require('./reviews.routes')
 
 // Assigning end-points
 restaurantsRouter.get('/', readActiveRestaurants)
-restaurantsRouter.get('/:id', restaurantExists, readRestaurantById)
+restaurantsRouter.get('/:id', restaurantIsActive, readRestaurantById)
 
 // Protecting endpoints
 restaurantsRouter.use(protectSession)
@@ -46,11 +46,11 @@ restaurantsRouter.use(protectAdmin)
 
 restaurantsRouter.patch(
     '/:id',
-    restaurantExists,
+    restaurantIsActive,
     updateRestaurantValidators,
     updateRestaurantById
 )
 
-restaurantsRouter.delete('/:id', restaurantExists, deleteRestaurantById)
+restaurantsRouter.delete('/:id', restaurantIsActive, deleteRestaurantById)
 
 module.exports = { restaurantsRouter }
