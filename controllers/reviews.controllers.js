@@ -11,7 +11,7 @@ dotenv.config()
 
 // >C< R U D
 const createRestaurantReview = catchAsync(async (req, res, next) => {
-    const { restaurant } = req
+    const restaurantId = req.restaurant.id
 
     const userId = req.sessionUser.id
 
@@ -21,13 +21,12 @@ const createRestaurantReview = catchAsync(async (req, res, next) => {
         userId,
         comment,
         rating,
-        restaurantId: restaurant.id,
+        restaurantId,
     })
 
     res.status(201).json({
         status: 'success',
         newReview,
-        restaurant,
     })
 })
 

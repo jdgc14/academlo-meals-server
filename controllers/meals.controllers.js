@@ -39,15 +39,22 @@ const readActiveMeals = catchAsync(async (req, res, next) => {
         include: {
             model: Restaurant,
             where: { status: 'active' },
+
+            /* Here i don't use required because i think if restaurant is disabled, user can't buy this food
+            required: false, // Apply OUTER JOIN */
+
             attributes: { exclude: ['status', 'createdAt', 'updatedAt'] },
-            // include: {
-            //     model: Review,
-            //     attributes: ['id', 'comment', 'rating'],
-            //     include: {
-            //         model: User,
-            //         attributes: ['id', 'name', 'email'],
-            //     },
-            // },
+            include: {
+                model: Review,
+                where: { status: 'active' },
+                required: false,
+                attributes: ['id', 'comment', 'rating'],
+                include: {
+                    model: User,
+                    required: false,
+                    attributes: ['id', 'name', 'email'],
+                },
+            },
         },
     })
 
@@ -61,7 +68,32 @@ const readActiveMeals = catchAsync(async (req, res, next) => {
 
 // C >R< U D
 const readActiveMealById = catchAsync(async (req, res, next) => {
-    const { meal } = req
+    const { id } = req.meal
+
+    const meal = await Meal.findOne({
+        where: { id, status: 'active' },
+        attributes: ['id', 'name', 'price'],
+        include: {
+            model: Restaurant,
+            where: { status: 'active' },
+
+            /* Here i don't use required because i think if restaurant is disabled, user can't buy this food
+            required: false, // Apply OUTER JOIN */
+
+            attributes: { exclude: ['status', 'createdAt', 'updatedAt'] },
+            include: {
+                model: Review,
+                where: { status: 'active' },
+                required: false,
+                attributes: ['id', 'comment', 'rating'],
+                include: {
+                    model: User,
+                    required: false,
+                    attributes: ['id', 'name', 'email'],
+                },
+            },
+        },
+    })
 
     res.status(200).json({
         status: 'success',

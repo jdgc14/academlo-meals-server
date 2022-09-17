@@ -7,6 +7,7 @@ const { Restaurant } = require('../models/restaurant.model')
 const { catchAsync } = require('../utils/catchAsync.util')
 const { AppError } = require('../utils/appError.util')
 
+// This middleware is to users controllers
 const orderExists = catchAsync(async (req, res, next) => {
     const { id } = req.params
     const userId = req.sessionUser.id
