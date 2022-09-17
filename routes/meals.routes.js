@@ -11,7 +11,7 @@ const {
 
 // Middlewares
 const { mealExists } = require('../middlewares/meals.middlewares')
-const { restaurantExists } = require('../middlewares/restaurants.middlewares')
+const { restaurantIsActive } = require('../middlewares/restaurants.middlewares')
 
 // Auth middlewares
 const {
@@ -35,7 +35,7 @@ mealsRouter.use(protectSession)
 // Protecting endpoints to admin level
 mealsRouter.use(protectAdmin)
 
-mealsRouter.post('/:id', restaurantExists, mealValidators, createMeal)
+mealsRouter.post('/:id', restaurantIsActive, mealValidators, createMeal)
 mealsRouter.patch('/:id', mealExists, mealValidators, updateMealById)
 mealsRouter.delete('/:id', mealExists, deleteMealById)
 

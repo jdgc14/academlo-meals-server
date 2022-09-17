@@ -10,7 +10,6 @@ const mealExists = catchAsync(async (req, res, next) => {
 
     const meal = await Meal.findOne({
         where: { id, status: 'active' },
-        // attributes: {},
     })
 
     // If user doesn't exist, send error message

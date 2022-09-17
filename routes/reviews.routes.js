@@ -8,7 +8,7 @@ const {
 } = require('../controllers/reviews.controllers')
 
 // Middlewares
-const { restaurantExists } = require('../middlewares/restaurants.middlewares')
+const { restaurantIsActive } = require('../middlewares/restaurants.middlewares')
 const { reviewIsActive } = require('../middlewares/reviews.middlewares')
 
 // Auth middlewares
@@ -24,7 +24,7 @@ const reviewsRouter = express.Router()
 
 reviewsRouter.post(
     '/:restaurantId',
-    restaurantExists,
+    restaurantIsActive,
     reviewValidators,
     createRestaurantReview
 )
