@@ -8,8 +8,14 @@ const {
 } = require('../controllers/reviews.controllers')
 
 // Middlewares
-const { restaurantIsActive } = require('../middlewares/restaurants.middlewares')
-const { reviewIsActive } = require('../middlewares/reviews.middlewares')
+const {
+    restaurantIsActive,
+    restaurantReviewIsActive,
+} = require('../middlewares/restaurants.middlewares')
+const {
+    reviewIsActive,
+    undoReviewRating,
+} = require('../middlewares/reviews.middlewares')
 
 // Auth middlewares
 const { protectReviewOwner } = require('../middlewares/auth.middlewares')
@@ -32,15 +38,19 @@ reviewsRouter.post(
 reviewsRouter.patch(
     '/:id',
     reviewIsActive,
+    restaurantReviewIsActive,
     reviewValidators,
     protectReviewOwner,
+    undoReviewRating,
     updateReviewById
 )
 
 reviewsRouter.delete(
     '/:id',
     reviewIsActive,
+    restaurantReviewIsActive,
     protectReviewOwner,
+    undoReviewRating,
     deleteReviewById
 )
 

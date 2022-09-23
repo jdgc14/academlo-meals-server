@@ -7,9 +7,12 @@ const {
     updateUserById,
     deleteUserById,
     login,
-    readOrders,
-    readOrderById,
 } = require('../controllers/users.controller')
+
+const {
+    readOrdersByUser,
+    readOrderById,
+} = require('../controllers/orders.controllers')
 
 // Middlewares
 const { userExists } = require('../middlewares/users.middlewares')
@@ -54,7 +57,7 @@ usersRouter.patch(
 
 usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUserById)
 
-usersRouter.get('/orders', readOrders)
+usersRouter.get('/orders', readOrdersByUser)
 
 usersRouter.get('/orders/:id', orderExists, readOrderById)
 

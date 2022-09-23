@@ -111,69 +111,10 @@ const login = catchAsync(async (req, res, next) => {
     })
 })
 
-const readOrders = catchAsync(async (req, res, next) => {
-    const { id } = req.sessionUser
-
-    const user = await User.findOne({
-        where: { id },
-        attributes: ['id', 'name', 'email'],
-        include: {
-            model: Order,
-            attributes: ['id', 'totalPrice', 'quantity', 'status'],
-            include: {
-                model: Meal,
-                attributes: ['id', 'name', 'price', 'status'],
-                include: {
-                    model: Restaurant,
-                    attributes: { exclude: ['createdAt', 'updatedAt'] },
-                },
-            },
-        },
-    })
-
-    res.status(200).json({
-        status: 'success',
-        user,
-    })
-})
-
-const readOrderById = catchAsync(async (req, res, next) => {
-    const { order } = req
-    const user = req.sessionUser
-
-    // const user = await User.findOne({
-    //     where: { id },
-    //     attributes: ['id', 'name', 'email'],
-    //     include: {
-    //         model: Order,
-    //         where: { id: orderId },
-    //         attributes: ['id', 'totalPrice', 'quantity', 'status'],
-    //         include: {
-    //             model: Meal,
-    //             attributes: ['id', 'name', 'price', 'status'],
-    //             include: {
-    //                 model: Restaurant,
-    //                 attributes: { exclude: ['createdAt', 'updatedAt'] },
-    //             },
-    //         },
-    //     },
-    // })
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            user,
-            order,
-        },
-    })
-})
-
 module.exports = {
     readActiveUsers,
     createUser,
     updateUserById,
     deleteUserById,
     login,
-    readOrders,
-    readOrderById,
 }

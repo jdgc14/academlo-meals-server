@@ -11,9 +11,9 @@ const createRestaurantValidators = [
         .withMessage('Address must be a string')
         .isLength({ min: 8 })
         .withMessage('Address must be at least 8 characters'),
-    body('rating')
-        .isInt({ min: 1, max: 5 })
-        .withMessage('Rating must be a integer from 1 to 5'),
+    // body('rating')
+    //     .isInt({ min: 1, max: 5 })
+    //     .withMessage('Rating must be a integer from 1 to 5'),
     checkValidations,
 ]
 

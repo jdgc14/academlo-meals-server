@@ -25,6 +25,8 @@ const checkRole = async (role) => {
     }
 }
 
+// Dont use this, express validators shouldn't query database
+/*
 const checkCreateEmailExist = async (email) => {
     const existingUser = await User.findOne({ where: { email } })
     if (existingUser) {
@@ -41,6 +43,7 @@ const checkUpdateEmailExist = async (email, req) => {
         throw new Error('Email already in use')
     }
 }
+*/
 
 const createUserValidators = [
     body('name')
@@ -48,10 +51,8 @@ const createUserValidators = [
         .withMessage('Name must be a string')
         .isLength({ min: 3 })
         .withMessage('Name must be at least 3 characters'),
-    body('email')
-        .isEmail()
-        .withMessage('Must provide a valid email')
-        .custom(checkCreateEmailExist),
+    body('email').isEmail().withMessage('Must provide a valid email'),
+    // .custom(checkCreateEmailExist),
     body('password')
         .isStrongPassword(strongPasswordOptions)
         .withMessage(
@@ -67,10 +68,8 @@ const updateUserValidators = [
         .withMessage('Name must be a string')
         .isLength({ min: 3 })
         .withMessage('Name must be at least 3 characters'),
-    body('email')
-        .isEmail()
-        .withMessage('Must provide a valid email')
-        .custom(checkUpdateEmailExist),
+    body('email').isEmail().withMessage('Must provide a valid email'),
+    // .custom(checkUpdateEmailExist),
     checkValidations,
 ]
 
