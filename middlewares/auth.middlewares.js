@@ -33,6 +33,9 @@ const protectSession = catchAsync(async (req, res, next) => {
     // Verify the token's owner
     const user = await User.findOne({
         where: { id: decoded.id, status: 'active' },
+        attributes: {
+            exclude: ['password'],
+        },
     })
 
     if (!user) {

@@ -15,12 +15,11 @@ dotenv.config()
 
 // >C< R U D
 const createRestaurant = catchAsync(async (req, res, next) => {
-    const { name, address, rating } = req.body
+    const { name, address } = req.body
 
     const newRestaurant = await Restaurant.create({
         name,
         address,
-        rating,
     })
 
     res.status(201).json({

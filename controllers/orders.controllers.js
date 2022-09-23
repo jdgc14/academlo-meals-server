@@ -42,7 +42,7 @@ const createOrder = catchAsync(async (req, res, next) => {
 const readOrdersByUser = catchAsync(async (req, res, next) => {
     const { id } = req.sessionUser
 
-    const order = await Order.findAll({
+    const orders = await Order.findAll({
         where: { userId: id },
         attributes: { exclude: ['mealId', 'userId'] },
         include: {
@@ -57,7 +57,20 @@ const readOrdersByUser = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        order,
+        orders,
+    })
+})
+
+const readOrderById = catchAsync(async (req, res, next) => {
+    const { order } = req
+    const user = req.sessionUser
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user,
+            order,
+        },
     })
 })
 
@@ -82,4 +95,10 @@ const deletOrder = catchAsync(async (req, res, next) => {
     res.status(204).json({ status: 'success' })
 })
 
-module.exports = { createOrder, readOrdersByUser, updateOrder, deletOrder }
+module.exports = {
+    createOrder,
+    readOrdersByUser,
+    readOrderById,
+    updateOrder,
+    deletOrder,
+}
